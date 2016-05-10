@@ -35,17 +35,17 @@ func retrieveFile(key string, bucket string, region string, destPath string) err
 }
 
 func main() {
-	flag.StringVar(&bucket, "bucket", "", "s3 bucket")
-	flag.StringVar(&region, "region", "", "s3 bucket")
-	flag.StringVar(&filePath, "file-path", "", "object path (w/o bucket)")
-	flag.StringVar(&destPath, "dest-path", "", "destination path (optional)")
+	flag.StringVar(&bucket, "bucket", os.Getenv("S3_BUCKET"), "s3 bucket")
+	flag.StringVar(&region, "region", os.Getenv("S3_REGION"), "aws region")
+	flag.StringVar(&filePath, "file-path", os.Getenv("S3_FILE_PATH"), "object path (w/o bucket)")
+	flag.StringVar(&destPath, "dest-path", os.Getenv("S3_DEST_PATH"), "destination path (optional)")
 	flag.Parse()
 
 	if destPath == "" {
 		_, destPath = path.Split(filePath)
 	}
 
-	if bucket == "" || filePath == "" {
+	if bucket == "" || filePath == "" || region == "" {
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
